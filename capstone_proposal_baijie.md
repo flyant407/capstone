@@ -62,14 +62,17 @@ _(approx. 1-2 paragraphs)_
 
 In this section, propose at least one evaluation metric that can be used to quantify the performance of both the benchmark model and the solution model. The evaluation metric(s) you propose should be appropriate given the context of the data, the problem statement, and the intended solution. Describe how the evaluation metric(s) are derived and provide an example of their mathematical representations (if applicable). Complex evaluation metrics should be clearly defined and quantifiable (can be expressed in mathematical or logical terms).
 这里采用kaggle上该项目的要求，提交到kaggle上的是每张图片被分类到每个类别的概率，使用logloss来评估模型的表现：
-$logloss = -\frac{1}{N}\sum_{i=1}^N\sum_{j=1}^My_{ij}\log(p_{ij})$，
+$$logloss =-\frac{1}{N}\sum_{i=1}^N\sum_{j=1}^My_{ij}\log(p_{ij})$$，
 其中N表示测试集中的照片数量这里是79726，M是照片的类别数量这里是10，log是自然对数。$y_{ij}$当第i张图片属于第j类时为1，其余为0，$p_{ij}$是模型预测第i张照片属于第j类的概率。
+(logarithmic loss)[http://wiki.fast.ai/index.php/Log_Loss]用来衡量分类模型的性能。一个完美的分类模型的log loss为0.
+与常用的痕量标准精度(Accuracy)相比，Accuracy中计算预测的类别与实际的类别是否相同，只有是或不是两种可能。而log loss考虑的是预测的不确定性，是预测到每一个类别的概率，可以对模型有更细微的衡量。
 在提交的数据没有要求某张图片的所有类别的概率和为1，因为每个概率会除以所有类别的概率和，做归一化处理。
 为了避免出现log(0)的情况，对于模型预测的结果使用$max(min(p,1-10^{-15}),10^{-15})$来代替直接输出。
 ### Project Design
 _(approx. 1 page)_
 
 In this final section, summarize a theoretical workflow for approaching a solution given the problem. Provide thorough discussion for what strategies you may consider employing, what analysis of the data might be required before being used, or which algorithms will be considered for your implementation. The workflow and discussion that you provide should align with the qualities of the previous sections. Additionally, you are encouraged to include small visualizations, pseudocode, or diagrams to aid in describing the project design, but it is not required. The discussion should clearly outline your intended workflow of the capstone project.
+1、导入数据集：使用scikit-learn库中的load_files函数，项目提供的数据集中
 
 -----------
 
