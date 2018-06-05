@@ -72,7 +72,11 @@ $$logloss =-\frac{1}{N}\sum_{i=1}^N\sum_{j=1}^My_{ij}\log(p_{ij})$$，
 _(approx. 1 page)_
 
 In this final section, summarize a theoretical workflow for approaching a solution given the problem. Provide thorough discussion for what strategies you may consider employing, what analysis of the data might be required before being used, or which algorithms will be considered for your implementation. The workflow and discussion that you provide should align with the qualities of the previous sections. Additionally, you are encouraged to include small visualizations, pseudocode, or diagrams to aid in describing the project design, but it is not required. The discussion should clearly outline your intended workflow of the capstone project.
-1、导入数据集：使用scikit-learn库中的load_files函数，项目提供的数据集中
+1、导入数据集：项目提供的训练数据集中已经将每一类的图片放在了一个单独的文件夹下，并以该类别命名，使用scikit-learn库中的load_files函数，可以很方便的得到训练数据和对应的类别标记。
+2、数据预处理：本项目采用Keras来搭建深度学习网络模型，使用Tensorlow作为后端。因为
+> 1. Keras的输入要求是一个4D的tensor即(nb_samples, rows, columns, channels)，因此将训练数据转化为这种格式的张量。
+> 2. 预训练模型的输入都进行了额外的归一化过程，因此这里也要对这些张量进行归一化，即对所有的像素都减去
+2、搭建模型：利用keras中利用“imagenet”预训练好的CNN模型(比如VGG16，ResNet50，Inception和Xception)
 
 -----------
 
