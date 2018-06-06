@@ -10,15 +10,15 @@ _(approx. 2-3 pages)_
 _(approx. 1-2 paragraphs)_
 
 In this section, provide brief details on the background information of the domain from which the project is proposed. Historical information relevant to the project should be included. It should be clear how or why a problem in the domain can or should be solved. Related academic research should be appropriately cited in this section, including why that research is relevant. Additionally, a discussion of your personal motivation for investigating a particular problem in the domain is encouraged but not required.
-本项目是美国的汽车保险和金融公司State Farm 2年前在kaggle上发起的一个比赛，主题是“Can computer vision spot distracted drivers?”。根据CDC汽车安全部门统计，五分之一的车祸是由司机的分心造成的，也就是说每年因分心导致交通事故死亡的人数有3000人。State Farm提供了通过在汽车仪表盘上的摄像机获取到司机驾驶过程中的2D图像作为数据集，来给每个驾驶员的行为作出分类。
+本项目是美国的汽车保险和金融公司State Farm 2年前在kaggle上发起的一个比赛，主题是“Can computer vision spot distracted drivers?”。根据CDC汽车安全部门统计，五分之一的车祸是由司机的分心造成的，也就是说每年因分心导致交通事故死亡的人数有3000人。严重的交通事故给肇事双方带来的伤害是无法弥补的，如果能有一个方式来提高驾驶的安全性那么将是非常有意义的事情。包括目前谷歌、百度以及各个汽车厂和创业公司都在大力投入的自动驾驶技术都是希望把驾驶变成一件安全可靠的事情。这里State Farm希望得到的能够识别出驾驶员是否在安全驾驶的方式对目前人类驾驶来说是很有效的提高驾驶安全性的方式。能够完成这个项目不仅仅是对自己能力的提升，也是为了安全驾驶做一点努力。
 该项目的图像是在一个可控的实验条件下得到的。司机并没有实际的在控制车辆，车辆是由一辆卡车拉着在路上行使的。
-目前深度学习在图像识别领域表现出了巨大的威力，
+目前深度学习在图像识别领域表现出了巨大的威力，而司机正常驾驶与分心的时候比如打电话，发短信等行为还是有很大的却别的，具备实现的可能性。
 
 ### Problem Statement
 _(approx. 1 paragraph)_
 
 In this section, clearly describe the problem that is to be solved. The problem described should be well defined and should have at least one relevant potential solution. Additionally, describe the problem thoroughly such that it is clear that the problem is quantifiable (the problem can be expressed in mathematical or logical terms) , measurable (the problem can be measured by some metric and clearly observed), and replicable (the problem can be reproduced and occurs more than once).
-
+State Farm提供了通过在汽车仪表盘上的摄像机获取到司机驾驶过程中的2D图像作为数据集，来给每个驾驶员的行为作出分类。
 
 ### Datasets and Inputs
 _(approx. 2-3 paragraphs)_
@@ -64,8 +64,8 @@ In this section, propose at least one evaluation metric that can be used to quan
 这里采用kaggle上该项目的要求，提交到kaggle上的是每张图片被分类到每个类别的概率，使用logloss来评估模型的表现：
 $$logloss =-\frac{1}{N}\sum_{i=1}^N\sum_{j=1}^My_{ij}\log(p_{ij})$$，
 其中N表示测试集中的照片数量这里是79726，M是照片的类别数量这里是10，log是自然对数。$y_{ij}$当第i张图片属于第j类时为1，其余为0，$p_{ij}$是模型预测第i张照片属于第j类的概率。
-(logarithmic loss)[http://wiki.fast.ai/index.php/Log_Loss]用来衡量分类模型的性能。一个完美的分类模型的log loss为0.
-与常用的痕量标准精度(Accuracy)相比，Accuracy中计算预测的类别与实际的类别是否相同，只有是或不是两种可能。而log loss考虑的是预测的不确定性，是预测到每一个类别的概率，可以对模型有更细微的衡量。
+[logarithmic loss](http://wiki.fast.ai/index.php/Log_Loss)用来衡量分类模型的性能。一个完美的分类模型的log loss为0.
+与常用的衡量标准精度(Accuracy)相比，Accuracy中计算预测的类别与实际的类别是否相同，只有是或不是两种可能。而log loss考虑的是预测的不确定性，是预测到每一个类别的概率，可以对模型有更细微的衡量。
 在提交的数据没有要求某张图片的所有类别的概率和为1，因为每个概率会除以所有类别的概率和，做归一化处理。
 为了避免出现log(0)的情况，对于模型预测的结果使用$max(min(p,1-10^{-15}),10^{-15})$来代替直接输出。
 ### Project Design
@@ -73,10 +73,13 @@ _(approx. 1 page)_
 
 In this final section, summarize a theoretical workflow for approaching a solution given the problem. Provide thorough discussion for what strategies you may consider employing, what analysis of the data might be required before being used, or which algorithms will be considered for your implementation. The workflow and discussion that you provide should align with the qualities of the previous sections. Additionally, you are encouraged to include small visualizations, pseudocode, or diagrams to aid in describing the project design, but it is not required. The discussion should clearly outline your intended workflow of the capstone project.
 1、导入数据集：项目提供的训练数据集中已经将每一类的图片放在了一个单独的文件夹下，并以该类别命名，使用scikit-learn库中的load_files函数，可以很方便的得到训练数据和对应的类别标记。
-2、数据预处理：本项目采用Keras来搭建深度学习网络模型，使用Tensorlow作为后端。因为
+2、数据预处理：本项目采用Keras来搭建深度学习网络模型，使用Tensorlow作为后端。
 > 1. Keras的输入要求是一个4D的tensor即(nb_samples, rows, columns, channels)，因此将训练数据转化为这种格式的张量。
-> 2. 预训练模型的输入都进行了额外的归一化过程，因此这里也要对这些张量进行归一化，即对所有的像素都减去
-2、搭建模型：利用keras中利用“imagenet”预训练好的CNN模型(比如VGG16，ResNet50，Inception和Xception)
+> 2. 原始数据的通道顺序为RGB，为了与预训练模型使用的数据相匹配，使用opencv将RGB图像转换为BGR图像。
+> 3. 预训练模型的输入都进行了额外的归一化过程，因此这里也要对这些张量进行归一化，即对所有的像素都减去像素均值，因为预训练的模型是使用ImagNet训练的，所以这里的像素均值使用的是根据所有ImageNet图像算出来的均值，采用BGR的格式[123.68, 116.779, 103.939]。
+3、搭建模型：
+> 1. 首先自己搭建一个简单的CNN网络，比如使用深度学习项目中给出的让自己实现的网络结构，如下 ![sample_cnn](./image/sample_cnn.png)看看效果如何，这一步的作用主要是验证整个程序的流程是否正确。这里可以使用一些optimizer比如Adam，RMSprop，SGD等来看看哪个表现更好。loss采用项目给的logloss;metrics使用accuracy。也调节不同epochs的值看模型的表现。
+> 2. 利用迁移学习：在keras中用“imagenet”预训练好的CNN模型(比如VGG16，ResNet50，Inception和Xception)后面加上GAP层，dropout和FCL层等方式构建自己的网络，来给图像中司机的行为分类。训练模型的时候注意在训练数据中分隔出训练集和验证集，使用网格搜索来遍历所有可能的组合。
 
 -----------
 
