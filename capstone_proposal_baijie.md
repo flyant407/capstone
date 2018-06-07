@@ -4,15 +4,12 @@ Baijie
 June 2nd, 2018
 
 ## Proposal
-_(approx. 2-3 pages)_
 
 ### Domain Background
-_(approx. 1-2 paragraphs)_
 
-In this section, provide brief details on the background information of the domain from which the project is proposed. Historical information relevant to the project should be included. It should be clear how or why a problem in the domain can or should be solved. Related academic research should be appropriately cited in this section, including why that research is relevant. Additionally, a discussion of your personal motivation for investigating a particular problem in the domain is encouraged but not required.
 本项目是美国的汽车保险和金融公司State Farm 2年前在kaggle上发起的一个比赛，主题是“Can computer vision spot distracted drivers?”。根据CDC汽车安全部门统计，五分之一的车祸是由司机的分心造成的，也就是说每年因分心导致交通事故死亡的人数有3000人。严重的交通事故给肇事双方带来的伤害是无法弥补的，如果能有一个方式来提高驾驶的安全性那么将是非常有意义的事情。包括目前谷歌、百度以及各个汽车厂和创业公司都在大力投入的自动驾驶技术都是希望把驾驶变成一件安全可靠的事情。这里State Farm希望得到的能够识别出驾驶员是否在安全驾驶的方式对目前人类驾驶来说是很有效的提高驾驶安全性的方式。能够完成这个项目不仅仅是对自己能力的提升，也是为了安全驾驶做一点努力。
 该项目的图像是在一个可控的实验条件下得到的。司机并没有实际的在控制车辆，车辆是由一辆卡车拉着在路上行使的。
-目前深度学习在图像识别领域表现出了巨大的威力，而司机正常驾驶与分心的时候比如打电话，发短信等行为还是有很大的却别的，具备实现的可能性。
+目前深度学习特别是巻积神经网络[1]在图像识别领域表现出了巨大的威力，在ImageNet的图像识别挑战赛中基本上所有的高分团队都是使用的CNN[2],取得了很好的效果。ILSVRC 2014中GoogLeNet[3] 将目标检测的平均准确率提高到0.439329,分类错误降低到0.06656。而司机正常驾驶与分心的时候比如打电话，发短信等行为还是有很大的却别的，具备实现的可能性。
 
 ### Problem Statement
 _(approx. 1 paragraph)_
@@ -79,9 +76,17 @@ In this final section, summarize a theoretical workflow for approaching a soluti
 > 3. 预训练模型的输入都进行了额外的归一化过程，因此这里也要对这些张量进行归一化，即对所有的像素都减去像素均值，因为预训练的模型是使用ImagNet训练的，所以这里的像素均值使用的是根据所有ImageNet图像算出来的均值，采用BGR的格式[123.68, 116.779, 103.939]。
 3、搭建模型：
 > 1. 首先自己搭建一个简单的CNN网络，比如使用深度学习项目中给出的让自己实现的网络结构，如下 ![sample_cnn](./image/sample_cnn.png)看看效果如何，这一步的作用主要是验证整个程序的流程是否正确。这里可以使用一些optimizer比如Adam，RMSprop，SGD等来看看哪个表现更好。loss采用项目给的logloss;metrics使用accuracy。也调节不同epochs的值看模型的表现。
-> 2. 利用迁移学习：在keras中用“imagenet”预训练好的CNN模型(比如VGG16，ResNet50，Inception和Xception)后面加上GAP层，dropout和FCL层等方式构建自己的网络，来给图像中司机的行为分类。训练模型的时候注意在训练数据中分隔出训练集和验证集，使用网格搜索来遍历所有可能的组合。
+> 2. 利用迁移学习：在keras中用“imagenet”预训练好的CNN模型(比如VGG16[4]，ResNet50[5]，Inception[3]和Xception[6])后面加上GAP[7]层，dropout[8]和FCL层等方式构建自己的网络，来给图像中司机的行为分类。训练模型的时候注意在训练数据中分隔出训练集和验证集，使用网格搜索来遍历所有可能的组合。
 
 -----------
+1. LeCun, Yann. "LeNet-5, convolutional neural networks". Retrieved 16 November 2013.
+2. "ImageNet Large Scale Visual Recognition Competition 2014 (ILSVRC2014)". Retrieved 30 January 2016.
+3. Szegedy, Christian; Liu, Wei; Jia, Yangqing; Sermanet, Pierre; Reed, Scott; Anguelov, Dragomir; Erhan, Dumitru; Vanhoucke, Vincent; Rabinovich, Andrew (2014). "Going Deeper with Convolutions". Computing Research Repository. arXiv:1409.4842 
+4. ABSTRACT arXiv:1409.1556v6 [cs.CV] 10 Apr 2015
+5. Kaiming He, "Deep Residual Learning for Image Recognition". arXiv:1512.03385 [cs.CV], 2015
+6. Franc ̧ois Chollet. "Xception: Deep Learning with Depthwise Separable Convolutions". arXiv:1610.02357v3 [cs.CV] 4 Apr 2017
+7. Min Lin, Qiang Chen, Shuicheng Yan. "Network In Network". arXiv:1312.4400 [cs.NE]
+8. Srivastava, Nitish; C. Geoffrey Hinton; Alex Krizhevsky; Ilya Sutskever; Ruslan Salakhutdinov (2014). "Dropout: A Simple Way to Prevent Neural Networks from overfitting" (PDF). Journal of Machine Learning Research. 15 (1): 1929–1958.
 
 **Before submitting your proposal, ask yourself. . .**
 
